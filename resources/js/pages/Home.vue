@@ -1,3 +1,3 @@
 <template>
-    <h1>PhotoList</h1>
+    <h2>Home page</h2>
 </template>
