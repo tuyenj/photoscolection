@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD', 'azure'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,7 +63,12 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
-
+        'azure' => [
+            'driver' => 'azure_blob',
+            'endpoint' => env('AZURE_BLOB_STORAGE_ENDPOINT'),
+            'container' => env('AZURE_BLOB_STORAGE_CONTAINER1'),
+            'blob_service_url' => env('AZURE_BLOB_SERVICE_URL'),
+        ],
     ],
 
 ];

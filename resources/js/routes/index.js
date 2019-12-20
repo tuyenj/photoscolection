@@ -5,6 +5,7 @@ import store from '../store';
 import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
+import AddPhoto from '../pages/AddPhoto';
 import SystemError from '../pages/SystemError';
 import PageNotFound from '../pages/PageNotFound';
 
@@ -39,6 +40,19 @@ const routes = [
                 next();
             }
         }
+    },
+    {
+        path: '/photo/new',
+        name: 'add-photo-page',
+        component: AddPhoto,
+        beforeEnter(to, from, next) {
+            if (store.getters['auth/check']) {
+                next();
+            } else {
+                next('/');
+            }
+        }
+
     },
     {
         path: '/system-error',

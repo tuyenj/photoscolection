@@ -156,5 +156,6 @@ return [
         'name' => '名前',
         'email' => 'メール',
         'password' => 'パスワード',
+        'image'=>'写真'
     ],
 ];

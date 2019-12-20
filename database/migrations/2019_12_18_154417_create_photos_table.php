@@ -18,6 +18,8 @@ class CreatePhotosTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('filename');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

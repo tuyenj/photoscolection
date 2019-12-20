@@ -179,7 +179,10 @@ return [
          * Debug bar
          */
         Barryvdh\Debugbar\ServiceProvider::class,
-
+        /**
+         * Save file to Azure
+         */
+        Ijin82\Flysystem\Azure\AzureBlobServiceProvider::class,
     ],
 
     /*
