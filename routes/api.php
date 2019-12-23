@@ -6,9 +6,11 @@ Route::get('/user', function () {
 })->name('user');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-// Photo
-Route::post('/photo/new','PhotoController@create')->name('photo.create');
+// Add new photo
+Route::post('/photo/new', 'PhotoController@create')->name('photo.create');
 
+// Edit photo
+Route::post('/photo/{id}/edit', 'PhotoController@update')->name('photo.update');
 
 // Token refresh
 Route::get('/refresh-token', function (Illuminate\Http\Request $request) {

@@ -49,7 +49,7 @@ const routes = [
             if (store.getters['auth/check']) {
                 next();
             } else {
-                next('/');
+                next('/login');
             }
         }
 

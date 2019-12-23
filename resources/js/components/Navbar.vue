@@ -31,6 +31,7 @@
         methods: {
             async userLogout() {
                 await this.$store.dispatch('auth/logout');
+                await this.$router.push('/');
             }
         }
     }

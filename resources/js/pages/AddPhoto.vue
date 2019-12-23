@@ -1,20 +1,23 @@
 <template>
-    <div class="card card-block min-vh-100">
+    <b-card header="写真のアップロード">
         <b-alert class="mt-5" :show="dismissSecs" variant="success" fade v-if="success !== ''">
-                <p>{{success}}</p>
+            <p>{{success}}</p>
         </b-alert>
-        <b-col class="col-4">
-            <b-img class="w-auto" thumbnail fluid :src="previewULR"></b-img>
-        </b-col>
-        <b-form-group label="Default:" label-for="file-default" label-cols-sm="2" class="mt-5 p-2">
-            <b-form-file id="file-default" ref="fileInput" v-on:change="fileUpload"></b-form-file>
-            <div v-if="errors !== null">
-                <p class="text-danger" v-for="img in errors.image">{{img}}</p>
-            </div>
-            <button class="btn btn-success mt-2" @click.prevent="photoUpload">Upload</button>
-        </b-form-group>
-
-    </div>
+        <b-row>
+            <b-col cols="7">
+                <b-form-group>
+                    <b-form-file id="file-default" ref="fileInput" v-on:change="fileUpload" placeholder="写真ファイルを選んでください"></b-form-file>
+                    <div v-if="errors !== null">
+                        <p class="text-danger" v-for="img in errors.image">{{img}}</p>
+                    </div>
+                    <button class="btn btn-success mt-4" @click.prevent="photoUpload">Upload</button>
+                </b-form-group>
+            </b-col>
+            <b-col cols="5" v-if="previewULR !== ''">
+                <b-img class="w-auto" thumbnail fluid :src="previewULR"></b-img>
+            </b-col>
+        </b-row>
+    </b-card>
 </template>
 <script>
     import {CREATED, VALIDATION_ERROR} from "../const/httpStatus";
@@ -30,11 +33,12 @@
                 dismissSecs: 5
             }
         },
-        created(){
-            this.success ='';
+        created() {
+            this.success = '';
         },
         methods: {
             fileUpload(e) {
+                this.errors = null;
                 this.image = e.target.files[0];
                 this.previewULR = URL.createObjectURL(this.image);
             },

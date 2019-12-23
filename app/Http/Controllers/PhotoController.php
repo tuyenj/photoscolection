@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditPhoto;
 use App\Http\Requests\StorePhoto;
 use App\Photo;
 use Auth;
@@ -43,5 +44,32 @@ class PhotoController extends Controller
             throw $exception;
         }
         return response($photo, 201);
+    }
+
+    public function update(EditPhoto $request, $id)
+    {
+        $photo = Photo::findOrFail($id);
+
+        $image = $request->file('image');
+
+        \DB::beginTransaction();
+        try {
+            if (!is_null($image)) {
+                $photo->filename = \Str::uuid()->toString() . '.' . $image->extension();
+                $photo->save();
+
+                // save image
+                $image->storeAs('/', $photo->filename, ['disk' => 'azure']);
+                \DB::commit();
+            }
+        } catch (\Exception|_Error $e) {
+            \DB::rollBack();
+            $storage = \Storage::cloud();
+            if ($storage->exists($photo->filename)) {
+                $storage->delete($photo->filename);
+            }
+            throw $e;
+        }
+        return \response()->json($photo, 200);
     }
 }
