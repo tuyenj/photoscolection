@@ -9,14 +9,25 @@ use Auth;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Storage;
+use Str;
 
 class PhotoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['show']);
+        $this->middleware('auth')->except(['index','show']);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function index()
+    {
+        $photo = Photo::with(['owner'])->orderByDesc('created_at');
+        return \response()->json($photo->paginate());
     }
 
     /**
@@ -30,7 +41,7 @@ class PhotoController extends Controller
 
         $photo = new Photo();
         $image = $request->file('image');
-        $photo->filename = \Str::uuid()->toString() . '.' . $extension;
+        $photo->filename = Str::uuid()->toString() . '.' . $extension;
 
         DB::beginTransaction();
         try {
@@ -52,19 +63,19 @@ class PhotoController extends Controller
 
         $image = $request->file('image');
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             if (!is_null($image)) {
-                $photo->filename = \Str::uuid()->toString() . '.' . $image->extension();
+                $photo->filename = Str::uuid()->toString() . '.' . $image->extension();
                 $photo->save();
 
                 // save image
                 $image->storeAs('/', $photo->filename, ['disk' => 'azure']);
-                \DB::commit();
+                DB::commit();
             }
-        } catch (\Exception|_Error $e) {
-            \DB::rollBack();
-            $storage = \Storage::cloud();
+        } catch (Exception|_Error $e) {
+            DB::rollBack();
+            $storage = Storage::cloud();
             if ($storage->exists($photo->filename)) {
                 $storage->delete($photo->filename);
             }

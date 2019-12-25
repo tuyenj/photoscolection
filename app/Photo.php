@@ -2,7 +2,12 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Storage;
 
 /**
  * App\Photo
@@ -10,25 +15,38 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $user_id
  * @property string $filename
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read mixed $image_path
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereFilename($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereUserId($value)
- * @mixin \Eloquent
+ * @method static Builder|Photo newModelQuery()
+ * @method static Builder|Photo newQuery()
+ * @method static Builder|Photo query()
+ * @method static Builder|Photo whereCreatedAt($value)
+ * @method static Builder|Photo whereFilename($value)
+ * @method static Builder|Photo whereId($value)
+ * @method static Builder|Photo whereUpdatedAt($value)
+ * @method static Builder|Photo whereUserId($value)
+ * @mixin Eloquent
  */
 class Photo extends Model
 {
-    protected $appends =['image_path'];
+    protected $appends = ['image_path'];
+    protected $hidden = ['user_id', 'filename', 'created_at', 'updated_at'];
+    protected $perPage = 9;
 
+    /**
+     * @return BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
+    }
+
+    /**
+     * @return string
+     */
     public function getImagePathAttribute()
     {
-        return \Storage::cloud()->url($this->filename);
+        return Storage::cloud()->url($this->filename);
     }
 }
