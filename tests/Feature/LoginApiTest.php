@@ -12,6 +12,8 @@ class LoginApiTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
+    private $user;
+
     public function setUp(): void
     {
         parent::setUp();

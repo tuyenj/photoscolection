@@ -8,6 +8,7 @@ import Login from '../pages/Login';
 import AddPhoto from '../pages/AddPhoto';
 import SystemError from '../pages/SystemError';
 import PageNotFound from '../pages/PageNotFound';
+import EditPhoto from "../pages/EditPhoto";
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,11 @@ const routes = [
             }
         }
 
+    },
+    {
+        path: '/photo/:id/edit',
+        name: 'edit-photo-page',
+        component: EditPhoto
     },
     {
         path: '/system-error',

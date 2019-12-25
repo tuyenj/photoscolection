@@ -12,6 +12,8 @@ Route::post('/photo/new', 'PhotoController@create')->name('photo.create');
 // Edit photo
 Route::post('/photo/{id}/edit', 'PhotoController@update')->name('photo.update');
 
+// Show detail photo
+Route::get('/photo/{id}','PhotoController@show')->name('photo.show');
 // Token refresh
 Route::get('/refresh-token', function (Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();

@@ -16,7 +16,7 @@ class PhotoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['show']);
     }
 
     /**
@@ -71,5 +71,14 @@ class PhotoController extends Controller
             throw $e;
         }
         return \response()->json($photo, 200);
+    }
+
+    public function show($id)
+    {
+        $photo = Photo::findOrFail($id);
+        return \response()->json([
+            'image_path'=>$photo->image_path,
+            'image_name'=>$photo->filename
+        ]);
     }
 }

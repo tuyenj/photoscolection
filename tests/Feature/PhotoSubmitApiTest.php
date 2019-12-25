@@ -14,6 +14,8 @@ class PhotoSubmitApiTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
+    private $user;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -47,7 +49,7 @@ class PhotoSubmitApiTest extends TestCase
 
     public function test_エラーを発生した場合は写真の登録されていない()
     {
-     \Schema::drop('photos');
+        \Schema::drop('photos');
         $response = $this->actingAs($this->user)->json('POST', route('photo.create'), [
             'image' => UploadedFile::fake()->image('photo.jpg')
         ]);

@@ -14,6 +14,9 @@ class EditApiTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
+    private $user;
+    private $photo;
+
     protected function setUp(): void
     {
         parent::setUp();
